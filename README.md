@@ -57,7 +57,6 @@ URI Versioning uses the version passed within the URI of the request, such as `h
 To enable URI Versioning for your application, do the following:
 
 ```typescript
-@@filename(main)
 const app = await NestFactory.create(AppModule);
 // or "app.enableVersioning()"
 app.enableVersioning({
@@ -79,7 +78,6 @@ Example HTTP Requests for Header Versioning:
 To enable **Header Versioning** for your application, do the following:
 
 ```typescript
-@@filename(main)
 const app = await NestFactory.create(AppModule);
 app.enableVersioning({
   type: VersioningType.HEADER,
@@ -101,7 +99,6 @@ Within the `Accept` header, the version will be separated from the media type wi
 To enable **Media Type Versioning** for your application, do the following:
 
 ```typescript
-@@filename(main)
 const app = await NestFactory.create(AppModule);
 app.enableVersioning({
   type: VersioningType.MEDIA_TYPE,
@@ -138,7 +135,6 @@ To enable **Custom Versioning** for your application, create an `extractor` func
 like so:
 
 ```typescript
-@@filename(main)
 // Example extractor that pulls out a list of versions from a custom header and turns it into a sorted array.
 // This example uses Fastify, but Express requests can be processed in a similar way.
 const extractor = (request: FastifyRequest): string | string[] =>
@@ -173,7 +169,6 @@ A version can be applied to a controller, setting the version for all routes wit
 To add a version to a controller do the following:
 
 ```typescript
-@@filename(cats.controller)
 @Controller({
   version: '1',
 })
@@ -183,7 +178,8 @@ export class CatsControllerV1 {
     return 'This action returns all cats for version 1';
   }
 }
-@@switch
+```
+```typescript
 @Controller({
   version: '1',
 })
@@ -202,7 +198,6 @@ A version can be applied to an individual route. This version will override any 
 To add a version to an individual route do the following:
 
 ```typescript
-@@filename(cats.controller)
 import { Controller, Get, Version } from '@nestjs/common';
 
 @Controller()
@@ -219,7 +214,8 @@ export class CatsController {
     return 'This action returns all cats for version 2';
   }
 }
-@@switch
+```
+```typescript
 import { Controller, Get, Version } from '@nestjs/common';
 
 @Controller()
@@ -245,7 +241,6 @@ Multiple versions can be applied to a controller or route. To use multiple versi
 To add multiple versions do the following:
 
 ```typescript
-@@filename(cats.controller)
 @Controller({
   version: ['1', '2'],
 })
@@ -255,7 +250,9 @@ export class CatsController {
     return 'This action returns all cats for version 1 or 2';
   }
 }
-@@switch
+
+```
+```typescript
 @Controller({
   version: ['1', '2'],
 })
@@ -278,7 +275,6 @@ An incoming request will be mapped to a `VERSION_NEUTRAL` controller or route re
 To add a version neutral controller or route do the following:
 
 ```typescript
-@@filename(cats.controller)
 import { Controller, Get, VERSION_NEUTRAL } from '@nestjs/common';
 
 @Controller({
@@ -290,7 +286,8 @@ export class CatsController {
     return 'This action returns all cats regardless of version';
   }
 }
-@@switch
+```
+```typescript
 import { Controller, Get, VERSION_NEUTRAL } from '@nestjs/common';
 
 @Controller({
@@ -311,7 +308,6 @@ export class CatsController {
 If you do not want to provide a version for each controller/or individual routes, or if you want to have a specific version set as the default version for every controller/route that don't have the version specified, you could set the `defaultVersion` as follows:
 
 ```typescript
-@@filename(main)
 app.enableVersioning({
   // ...
   defaultVersion: '1'
@@ -327,7 +323,6 @@ app.enableVersioning({
 [Middlewares](https://docs.nestjs.com/middleware) can also use versioning metadata to configure the middleware for a specific route's version. To do so, provide the version number as one of the parameters for the `MiddlewareConsumer.forRoutes()` method:
 
 ```typescript
-@@filename(app.module)
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { CatsModule } from './cats/cats.module';
